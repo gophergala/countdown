@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 	"time"
@@ -31,16 +32,20 @@ func main() {
 		os.Exit(1)
 	}
 	dformat := getFormat()
+	tick(os.Stdout, date, dformat)
+}
+
+func tick(writer io.Writer, date time.Time, dformat durationFormat) {
 	ticker := time.Tick(1 * time.Second)
 	for t := range ticker {
 		remaining := date.Sub(t)
 		if remaining.Seconds() < 0.0 {
-			fmt.Fprintf(os.Stdout, "\n>>> Deadline reached. Exiting.\n")
+			fmt.Fprintf(writer, "\n>>> Deadline reached. Exiting.\n")
 			os.Exit(0)
 		}
 		timeString := format(dformat, remaining)
 		template := fmt.Sprintf("%%%ds\r>>> T minus %%s", len(timeString))
-		fmt.Fprintf(os.Stdout, template, "", timeString)
+		fmt.Fprintf(writer, template, "", timeString)
 	}
 }
 
