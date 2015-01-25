@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	gopherGalaFlag  = flag.Bool("gophergala", false, "-gophergala")
 	fromSecondsFlag = flag.Bool("s", false, "-s")
 	fromMinutesFlag = flag.Bool("m", false, "-m")
 	fromHoursFlag   = flag.Bool("h", false, "-h")
@@ -17,7 +18,12 @@ var (
 
 func main() {
 	flag.Parse()
-	deadline := flag.Arg(0)
+	var deadline string
+	if *gopherGalaFlag {
+		deadline = "2015-01-26T01:00:00+00:00"
+	} else {
+		deadline = flag.Arg(0)
+	}
 	date, err := time.Parse(time.RFC3339, deadline)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "Error: %T{%v}\n", err, err)
