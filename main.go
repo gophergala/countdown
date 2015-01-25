@@ -20,9 +20,9 @@ func main() {
 	for t := range ticker {
 		remaining := date.Sub(t)
 		if remaining.Seconds() < 0.0 {
-			fmt.Printf("\n>>> Deadline reached. Exiting.\n")
+			fmt.Fprintf(os.Stdout, "\n>>> Deadline reached. Exiting.\n")
 			os.Exit(0)
 		}
-		fmt.Printf("\r>>> T minus %d seconds", int(math.Ceil(remaining.Seconds())))
+		fmt.Fprintf(os.Stdout, "\r>>> T minus %d seconds", int(math.Ceil(remaining.Seconds())))
 	}
 }
